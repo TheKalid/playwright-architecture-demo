@@ -1,13 +1,16 @@
-import { test, expect } from './fixtures';
+import { test, expect } from '../fixtures';
 import {
   SAUCE_DEMO_PASSWORD,
   SAUCE_DEMO_USERS,
   type SauceDemoUserKey,
-} from '../utils/users';
+} from '../../utils/users';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://www.saucedemo.com');
 });
+
+//todo lo que sea async siempre regresa una promesa
+// y el await es opcional pero es una buena practica usarlo.
 
 test.describe('E2E Tests', () => {
   for (const key of Object.keys(SAUCE_DEMO_USERS) as SauceDemoUserKey[]) {

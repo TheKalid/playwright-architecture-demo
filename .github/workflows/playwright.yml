@@ -1,11 +1,15 @@
 name: Playwright Tests
 #Running actions 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [main]
   pull_request:
   schedule:
-    - cron: '0 */6 * * *'
+    # Semanal: domingo 00:00 UTC (GitHub Actions usa UTC)
+    - cron: '0 0 * * 0'
 
 jobs:
   test:
@@ -22,7 +26,21 @@ jobs:
 
       - run: npx playwright install --with-deps
 
-      - run: npx playwright test
+      - name: Run tests and export JSON
+        run: PLAYWRIGHT_JSON_OUTPUT_NAME=test-results.json npx playwright test --reporter=list,json,html
+
+      - name: Generate chart
+        if: always()
+        run: node scripts/generate-chart.js
+
+      - name: Commit updated chart
+        if: always() && (github.event_name == 'push' || github.event_name == 'schedule')
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/test-results.svg
+          git commit -m "chore: update test chart [skip ci]" || echo "no changes"
+          git push
 
       - name: Upload report
         if: always()
@@ -30,3 +48,10 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+
+      - name: Upload JSON results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-json
+          path: test-results.json

@@ -74,6 +74,14 @@ After each run, an HTML report is generated.
 
 ---
 
+## 📈 Live Test Results
+
+This chart is generated automatically from Playwright JSON results in CI.
+
+![Test Results](./docs/test-results.svg)
+
+---
+
 ## 🎥 Demo
 
 ![Demo](./assets/%20demo.gif)
