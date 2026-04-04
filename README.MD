@@ -1,15 +1,22 @@
 # Playwright Automation Portfolio
 
-## Live test results in CI
-
-[![CI - Playwright Tests](https://github.com/TheKalid/playwright-architecture-demo/actions/workflows/playwright.yml/badge.svg)](https://github.com/TheKalid/playwright-architecture-demo/actions)
-![Test Results](./docs/test-results.svg)
-
 ---
 
 ## Overview
 
 End-to-end and API test automation with Playwright and TypeScript, wired for CI/CD (GitHub Actions). The suite targets [Sauce Demo](https://www.saucedemo.com/) for UI flows and [DummyJSON](https://dummyjson.com/) for HTTP API checks using Playwright’s built-in `request` fixture.
+
+---
+
+## Demo
+![Demo](./assets/%20demo.gif)
+
+---
+
+## Live test results in CI
+
+![Test Results](./docs/test-results.svg)
+[![CI - Playwright Tests](https://github.com/TheKalid/playwright-architecture-demo/actions/workflows/playwright.yml/badge.svg)](https://github.com/TheKalid/playwright-architecture-demo/actions)
 
 ---
 
@@ -97,12 +104,6 @@ Each CI run uses **list**, **JSON**, and **HTML** reporters. After the job finis
 - **test-results-json** — `test-results.json` (used to refresh `docs/test-results.svg` on push/schedule)
 
 Locally, `playwright.config.ts` uses **list** plus **Allure** (`allure-results/`).
-
----
-
-## Demo
-
-![Demo](./assets/%20demo.gif)
 
 ---
 
