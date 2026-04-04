@@ -1,41 +1,52 @@
-# 🚀 Playwright Automation Portfolio
+# Playwright Automation Portfolio
+
+## Live test results in CI
 
 [![CI - Playwright Tests](https://github.com/TheKalid/playwright-architecture-demo/actions/workflows/playwright.yml/badge.svg)](https://github.com/TheKalid/playwright-architecture-demo/actions)
-This opens GitHub Actions, where you can see E2E test runs, pipeline history, and execution results.
----
-
-## 📌 Overview
-
-This project is an **End-to-End Test Automation Framework** built with Playwright and integrated with CI/CD using GitHub Actions.
-
-It demonstrates how automated tests can run reliably in a continuous integration environment with reporting and debugging capabilities.
+![Test Results](./docs/test-results.svg)
 
 ---
 
-## ⚙️ Tech Stack
+## Overview
 
-* 🧪 Playwright
-* 💻 TypeScript
-* ⚡ GitHub Actions
-* 🌐 Node.js
+End-to-end and API test automation with Playwright and TypeScript, wired for CI/CD (GitHub Actions). The suite targets [Sauce Demo](https://www.saucedemo.com/) for UI flows and [DummyJSON](https://dummyjson.com/) for HTTP API checks using Playwright’s built-in `request` fixture.
 
 ---
 
-## 🎯 Key Features
+## Tech stack
 
-* ✅ End-to-End UI Testing
-* 🔁 Automatic execution on push & pull requests
-* 📊 HTML reports with detailed results
-* 📸 Screenshots on failure
-* 🎥 Video recording for debugging
-* 🧠 Trace viewer for deep analysis
-* ⏱ Parallel test execution
+- Playwright Test
+- TypeScript
+- GitHub Actions
+- Node.js
+- Allure (local reporting via `allure-playwright`)
 
 ---
 
-## 🤖 CI/CD Pipeline
+## Key features
 
-This project uses GitHub Actions to:
+**UI (E2E)**
+
+- Page Object Model with shared Playwright fixtures (`tests/fixtures`) injecting login, header, cart, checkout, and inventory pages
+- Data-driven login scenarios for all documented Sauce Demo user types (standard, locked out, problem user, and others from `utils/users.ts`)
+- Full purchase flow: login, add item, cart, checkout steps, and order completion assertion
+- `baseURL` and `testIdAttribute: 'data-test'` aligned with Sauce Demo markup
+
+**API**
+
+- Contract-style checks against DummyJSON: auth (login, Bearer `/me`, token refresh), products (list, single, search, pagination, categories), and simulated create/update/delete responses
+
+**Execution and quality**
+
+- Parallel runs locally; CI-friendly retries and worker settings
+- Traces on first retry
+- Multi-browser projects: Chromium, Firefox, WebKit
+
+---
+
+## CI/CD pipeline
+
+GitHub Actions:
 
 1. Install dependencies
 2. Install Playwright browsers
@@ -43,75 +54,85 @@ This project uses GitHub Actions to:
 4. Generate reports
 5. Upload results as artifacts
 
-📌 Tests run on:
-
-* Push to `main`
-* Pull Requests
-* Scheduled executions
+Tests run on push to `main`, pull requests, and scheduled workflows.
 
 ---
 
-## ▶️ Run Locally
+## Run locally
+
+Install dependencies and run the full suite:
 
 ```bash
 npm install
 npx playwright test
 ```
 
-To open the report:
+Run only UI or API tests:
 
 ```bash
+npx playwright test tests/e2e
+npx playwright test tests/api
+```
+
+Open the Allure report (after a run that produced `allure-results/`):
+
+```bash
+npx allure serve allure-results
+```
+
+For a Playwright HTML report on your machine:
+
+```bash
+npx playwright test --reporter=html
 npx playwright show-report
 ```
 
 ---
 
-## 📊 Test Report
+## Test report
 
-After each run, an HTML report is generated.
+Each CI run uses **list**, **JSON**, and **HTML** reporters. After the job finishes you can download:
 
-👉 Download it from: **Actions → Artifacts → playwright-report**
+- **playwright-report** — HTML report (`index.html` after unzip)
+- **test-results-json** — `test-results.json` (used to refresh `docs/test-results.svg` on push/schedule)
 
----
-
-## 📈 Live Test Results
-
-This chart is generated automatically from Playwright JSON results in CI.
-
-![Test Results](./docs/test-results.svg)
+Locally, `playwright.config.ts` uses **list** plus **Allure** (`allure-results/`).
 
 ---
 
-## 🎥 Demo
+## Demo
 
 ![Demo](./assets/%20demo.gif)
 
 ---
 
-## 📂 Project Structure
+## Project structure
 
 ```
 .
 ├── tests/
-├── pages/
-├── utils/
+│   ├── e2e/           # Sauce Demo UI scenarios
+│   ├── api/           # DummyJSON API tests (request context)
+│   └── fixtures/      # Extended test with page object fixtures
+├── pages/             # Page objects and components
+├── utils/             # Shared test data (e.g. demo users)
 ├── playwright.config.ts
 └── .github/workflows/
 ```
 
 ---
 
-## 💡 What This Project Demonstrates
+## What this project demonstrates
 
-* Test automation with Playwright
-* CI/CD integration
-* Debugging with traces, videos, and screenshots
-* Scalable and maintainable test architecture
+- Maintainable UI automation with fixtures and page objects
+- API testing without a separate HTTP client, using Playwright `request`
+- CI/CD integration and failure diagnostics (traces, CI artifacts)
+- Clear separation between E2E and API suites under `tests/`
 
 ---
 
-## 👨‍💻 Kalid M
+## Kalid M
 
-SDET focused on building reliable automation solutions.
+SDET focused on reliable automation and testable delivery pipelines.
 
 ---
